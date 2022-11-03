@@ -13,9 +13,45 @@ class HashTable:
     self.max_load_factor = 0.7
 
   def add(self, k, v):
-    self.add_element(k, v, self.harray)
-    self.num_elements += 1
-    self.resize()
+    index = self.hash(k)
+    chain = self.harray[index]
+    element = chain.head
+    while element and element.key != k:
+      element = element.next
+    if element == None:
+      hash_element = HashElement(k, v)
+      hash_element.next = chain.head
+      chain.change_head(hash_element)
+      self.num_elements += 1
+      self.resize()
+    else:
+      element.value = v
+    
+  def get_value(self, k):
+    index = self.hash(k)
+    chain = self.harray[index]
+    element = chain.head
+    while element and element.key != k:
+      element = element.next
+    if element:
+      return element.value
+    
+  def remove(self, k):
+    index = self.hash(k)
+    chain = self.harray[index]
+    element = chain.head
+    previous_element = None
+    while element and element.key !=k:
+      previous_element = element
+      element = element.next
+    if element:
+      if previous_element:
+        previous_element.add_next(element.next)
+      else:
+        chain.change_head(element.next)
+    
+
+
 
   def create_table(self, size):
     harray = []
@@ -38,7 +74,6 @@ class HashTable:
     self.load_factor = self.num_elements / self.table_size
 
 
-
   def add_element(self, k, v, harray):
     index = self.hash(k)
     chain = harray[index]
@@ -55,5 +90,13 @@ class HashTable:
     index = index % self.table_size
     return index
 
-
-
+  def collisions(self):
+    collisions = []
+    for chain in self.harray:
+      length = 0
+      el = chain.head
+      while el:
+        length += 1
+        el = el.next
+      collisions.append(str(length))
+    return collisions
