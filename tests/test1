@@ -1,0 +1,15 @@
+9
+find 5413688000
+add 5413688000 me
+add 5413688002 xiang
+add 5419084858 tony
+find 5419084858
+del 5413688002
+find 5413688002
+add 18983712027 clivia
+find 18983712027
+
+not found
+tony
+not found
+clivia
